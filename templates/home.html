@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+ 
+  <div class="container">
+    <div class="container" style="justify-content: ">
+      <div class="row">
+        <div style="background-color: slategrey;" class="col">
+          <canvas id="bar-chart" width="450" height="450"></canvas>
+        </div>
+        <div style="background-color: slategrey;" class="col">
+          <canvas id="line-chart" width="450" height="450"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+      <table class="table table-striped table-dark" style="margin-top: 10px; width: 80%;">
+        <tr>
+          <th scope="col">sales</th>
+          <th scope="col">recent dates</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for i in recents %}
+          <tr>
+            <td>{{i[0]}}</td>
+            <td>{{i[1]}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </tr>
+      </table>
+    </div>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>new Chart(document.getElementById("bar-chart"), {
+        type: 'bar',
+        data: {
+          labels: {{ pname | safe }},
+        datasets: [
+        {
+          label: "sales",
+          backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+          data: {{ psales | safe }}
+             },
+        {
+          label: "profit",
+          backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+          data: {{ prof | safe }}
+             }
+      ]
+         },
+        options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'sales per product'
+        }
+      }
+     });</script>
+    <script>new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+          labels: {{ dys | safe }},
+        datasets: [{
+          data: {{ s_d | safe }},
+        label: "Sales daily",
+        borderColor: "#3e95cd",
+        fill: false
+          }, {
+          data: {{ pd | safe }},
+        label: "profit daily",
+        borderColor: "#8e5ea2",
+        fill: false
+          }
+      ]
+      },
+        options: {
+        title: {
+          display: true,
+          text: 'Total sales per day'
+        }
+      }
+    });</script>
+
+{% endblock %}
